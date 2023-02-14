@@ -1,5 +1,5 @@
 class OrdersManager{
-    static fetchOrderHtml = function(url, onResponseReceived){
+    static fetchOrderHtml(url, onResponseReceived){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
@@ -8,6 +8,11 @@ class OrdersManager{
         }
         xhttp.open("GET", url, "true");
         xhttp.send();
+    }
+
+    static fetchOrderById(id, onResponseReceived){
+        var url = PrivateData.url_order_root + id;
+        this.fetchOrderHtml(url, onResponseReceived);
     }
 
     static getExampleOrder(){
@@ -22,5 +27,38 @@ class OrdersManager{
             street: "Główna",
             post_code: "11-123"
         }
+    }
+
+    static parsePhone(phone){
+        return phone;
+    }
+
+    static parseHtmlToOrder(html){
+        const pattern = /.*Telefon<\/div>[^>]+>(?<phone>[^<]*)<[^E]*Email[^:]*:(?<email>[^"]*)[^A]*Adres dostawy(?:[^>]*>){2}(?<first_name>[^<\s]*)\s*(?<last_name>[^<]*)(?:[^>]*>){4}(?<street>[^<]*?)\s*(?<building_number>[\d\/]+)<(?:[^>]*>){2}(?<postalCode>\d\d-\d\d\d) (?<city>[^<\/]*)[^P]*Paczkomat(?:[^>]*>){2}\s*(?<lockerId>[^<\s]*)\s*<(?:[^>]*>){2}\s*(?<lockerAddress>[^<]*\S)\s*</;
+        
+        var found = html.match(pattern);
+        if(found == null)
+            return false;
+
+        var order = {
+            lockerId: found.groups.lockerId,
+            email: found.groups.email,
+            phone: this.parsePhone(found.groups.phone),
+            first_name: found.groups.first_name,
+            last_name: found.groups.last_name,
+            city: found.groups.city,
+            building_number: found.groups.building_number,
+            street: found.groups.street,
+            post_code: found.groups.postalCode
+        }
+        return order;
+    }
+
+    static addInPostIcon(element){
+        element.contents().filter(function(){return this.nodeType===3;}).remove();
+        element.width("100px");
+        element.append(
+            `<a href="" info="InPost" style="background-image: url(`+chrome.runtime.getURL('img/inpost_logo.png')+`)">InPost</a>`
+        );
     }
 }
