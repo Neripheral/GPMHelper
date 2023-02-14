@@ -10,7 +10,7 @@ function loadFrom(index){
         if(e == null)
             return;
     var id = $(e).attr("id").match(/so_row_(?<id>\d*)/)[1];
-    if(index < 100)
+    if(index < 80)
         OrdersManager.fetchOrderById(id, function(html){
             var order = OrdersManager.parseHtmlToOrder(html);
             loadFrom(index+1);
