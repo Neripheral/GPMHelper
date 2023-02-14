@@ -13,7 +13,11 @@ function main(){
                 if(order == false)
                     return false;
 
-                OrdersManager.addInPostIcon($(e).children('.td_operation').first());
+                OrdersManager.addInPostIcon($(e).children('.td_operation').first(), function(){
+                    InPostManager.addShipment(order, function(response){
+                        console.log(JSON.parse(response));
+                    });
+                });
                 console.log(order);
             });
     });

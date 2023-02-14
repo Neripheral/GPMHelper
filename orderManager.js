@@ -54,11 +54,12 @@ class OrdersManager{
         return order;
     }
 
-    static addInPostIcon(element){
+    static addInPostIcon(element, onClick){
         element.contents().filter(function(){return this.nodeType===3;}).remove();
         element.width("100px");
         element.append(
-            `<a href="" info="InPost" style="background-image: url(`+chrome.runtime.getURL('img/inpost_logo.png')+`)">InPost</a>`
+            `<a info="InPost" style="background-image: url(`+chrome.runtime.getURL('img/inpost_logo.png')+`)">InPost</a>`
         );
+        element.click(onClick);
     }
 }
