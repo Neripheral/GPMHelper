@@ -54,7 +54,12 @@ class OrdersManager{
         return order;
     }
 
-    static addInPostIcon(element, onClick){
+    static getRowElementFor(id){
+        return $(".gpmlist tbody #so_row_"+id);
+    }
+
+    static addInPostIcon(id, onClick){
+        var element = this.getRowElementFor(id).children('.td_operation').first();
         element.contents().filter(function(){return this.nodeType===3;}).remove();
         element.width("100px");
         element.append(

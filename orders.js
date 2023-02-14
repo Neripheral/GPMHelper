@@ -13,7 +13,7 @@ function main(){
                 if(order == false)
                     return false;
 
-                OrdersManager.addInPostIcon($(e).children('.td_operation').first(), function(){
+                OrdersManager.addInPostIcon(id, function(){
                     InPostManager.addShipment(order, function(response){
                         console.log(JSON.parse(response));
                     });
