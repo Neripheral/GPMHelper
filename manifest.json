@@ -15,5 +15,11 @@
         "orderManager.js",
         "privateData.js", 
         "orders.js"]
-    }]
+    }],
+    "web_accessible_resources": [
+        {
+          "resources": ["img/inpost_logo.png"],
+          "matches": ["<all_urls>"]
+        }
+      ]
 }
