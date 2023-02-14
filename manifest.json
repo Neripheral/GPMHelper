@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "GPMHelper",
-    "description": "Automatisation helper and CMD manager.",
+    "description": "Automation helper and CMD manager.",
     "version": "1.0",
     "icons": {
         "16": "/img/icon16.png",
