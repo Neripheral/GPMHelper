@@ -65,12 +65,19 @@ class OrdersManager{
     static addInPostIcon(id, onClick){
         var element = this.getRowElementFor(id).children('.td_operation').first();
         element.contents().filter(function(){return this.nodeType===3;}).remove();
-        element.width("100px");
+        element.width("140px");
         element.append(
             `<a id="inpost_icon" info="InPost">InPost</a>`
         );
         this.setElementIcon(element.find("#inpost_icon"), chrome.runtime.getURL('img/inpost_logo.png'));
         element.find("#inpost_icon").click(onClick);
+        element.append(
+            `<select id='inpost_size'>
+                <option value='A'>A</option>
+                <option value='B'>B</option>
+                <option value='C'>C</option>
+            </select>`
+        );
     }
 
     static markRowWithColor(id, color){
