@@ -70,7 +70,6 @@ class OrdersManager{
             `<a id="inpost_icon" info="InPost">InPost</a>`
         );
         this.setElementIcon(element.find("#inpost_icon"), chrome.runtime.getURL('img/inpost_logo.png'));
-        element.find("#inpost_icon").click(onClick);
         element.append(
             `<select id='inpost_size'>
                 <option value='A'>A</option>
@@ -78,6 +77,9 @@ class OrdersManager{
                 <option value='C'>C</option>
             </select>`
         );
+        element.find("#inpost_icon").click(function(){
+            onClick(element.find("#inpost_size option:selected").text());
+        });
     }
 
     static markRowWithColor(id, color){

@@ -42,6 +42,7 @@ class InPostManager{
      *              building_number
      *              street
      *              post_code
+     *              size            small/medium/large
      * @param {*} onResponseReceived 
      */
     static addShipment(order, onResponseReceived){
@@ -53,6 +54,7 @@ class InPostManager{
         xhttp.open("POST", url, "true");
         xhttp.setRequestHeader("Authorization", 'Bearer ' + PrivateData.token);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        console.log(JSON.stringify(order));
         var text = JSON.stringify({
             "service": "inpost_locker_standard",
             "custom_attributes": {
@@ -60,7 +62,7 @@ class InPostManager{
             },
             "parcels":[
                 {
-                    "template": "small",
+                    "template": order.size,
                     "tracking_number": null
                 }
             ],

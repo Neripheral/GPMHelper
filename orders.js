@@ -17,7 +17,14 @@ function loadFrom(index){
             if(order == false)
                 return false;
 
-            OrdersManager.addInPostIcon(id, function(){
+            OrdersManager.addInPostIcon(id, function(size){
+                if(size == "A")
+                    order.size = "small";
+                else if(size == "B")
+                    order.size = "medium";
+                else if(size == "C")
+                    order.size = "large";
+
                 InPostManager.addShipment(order, function(response){
                     if(response.readyState == 4 && response.status > 200 && response.status < 300)
                         OrdersManager.markRowAsSent(id);
