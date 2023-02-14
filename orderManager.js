@@ -82,7 +82,30 @@ class OrdersManager{
         this.setElementIcon(this.getRowElementFor(id).find("#inpost_icon"), chrome.runtime.getURL('img/success_icon.png'));
     }
 
-    static markRowWithRed(id){
+    static markRowAsError(id, originalMessage){
+        var message = structuredClone(originalMessage);
         this.markRowWithColor(id, "red");
+        var iconElement = this.getRowElementFor(id).find("#inpost_icon");
+        this.setElementIcon(iconElement, chrome.runtime.getURL('img/error_icon.png'));
+        message.problem = [];
+        if(Object.hasOwn(message, "custom_attributes")){
+            var locker = message.custom_attributes.find(element => Object.hasOwn(element, "target_point"));
+            if(locker != false){
+                message.custom_attributes.splice(message.custom_attributes.indexOf(locker), 1);
+                message.problem.push("Podany paczkomat nie istnieje!")
+            }
+            if(message.custom_attributes.length == 0)
+                delete message.custom_attributes;
+        }
+        if(Object.hasOwn(message, "receiver")){
+            var email = message.receiver.find(element => Object.hasOwn(element, "email"));
+            if(email != false){
+                message.receiver.splice(message.receiver.indexOf(email), 1);
+                message.problem.push("Podany email jest niepoprawny!")
+            }
+            if(message.receiver.length == 0)
+                delete message.receiver;
+        }
+        iconElement.prop("title", JSON.stringify(message));
     }
 }

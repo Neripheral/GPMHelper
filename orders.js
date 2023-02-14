@@ -18,8 +18,9 @@ function main(){
                         if(response.readyState == 4 && response.status > 200 && response.status < 300)
                             OrdersManager.markRowAsSent(id);
                         else if(response.readyState == 4 && response.status >= 400){
-                            OrdersManager.markRowWithRed(id);
-                            console.log(JSON.parse(response.responseText));
+                            var responseText = JSON.parse(response.responseText);
+                            OrdersManager.markRowAsError(id, responseText.details);
+                            console.log(responseText);
                         }
                     });
                 });
