@@ -11,9 +11,9 @@
     "content_scripts": [{
         "matches": ["https://gpm.pl/shop/admin/orders*"],
         "js": ["thirdParty/jquery-3.6.3.min.js", 
+        "privateData.js", 
         "inPostManager.js",
         "orderManager.js",
-        "privateData.js", 
         "orders.js"]
     }],
     "web_accessible_resources": [
