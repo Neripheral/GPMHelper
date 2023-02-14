@@ -79,7 +79,7 @@ class OrdersManager{
 
     static markRowAsSent(id){
         this.markRowWithColor(id, "green");
-        this.getRowElementFor(id).find("#inpost_icon").css("background-image", "url(")
+        this.setElementIcon(this.getRowElementFor(id).find("#inpost_icon"), chrome.runtime.getURL('img/success_icon.png'));
     }
 
     static markRowWithRed(id){
