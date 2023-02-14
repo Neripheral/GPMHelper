@@ -1,12 +1,9 @@
 class InPostManager{
-    constructor(companyId, token){
-        this.companyId = companyId;
-        this.token = token;
-        this.root = "https://sandbox-api-shipx-pl.easypack24.net/v1/";
-        //this.root = "https://api-shipx-pl.easypack24.net/v1/";
-    }
+    static companyId = PrivateData.organizationId;
+    static token = PrivateData.token;
+    static root = "https://sandbox-api-shipx-pl.easypack24.net/v1/";
 
-    tryConnect(onResponseReceived){
+    static tryConnect(onResponseReceived){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
@@ -21,7 +18,7 @@ class InPostManager{
         xhttp.send();
     }
 
-    getShipments(onResponseReceived){
+    static getShipments(onResponseReceived){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             onResponseReceived(this.responseText);
@@ -47,7 +44,7 @@ class InPostManager{
      *              post_code
      * @param {*} onResponseReceived 
      */
-    addShipment(order, onResponseReceived){
+    static addShipment(order, onResponseReceived){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             onResponseReceived(this.responseText);
