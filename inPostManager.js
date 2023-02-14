@@ -47,7 +47,7 @@ class InPostManager{
     static addShipment(order, onResponseReceived){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
-            onResponseReceived(this.responseText);
+            onResponseReceived(this);
         }
         var url = this.root + "organizations/" + this.companyId + "/shipments";
         xhttp.open("POST", url, "true");

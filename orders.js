@@ -15,7 +15,12 @@ function main(){
 
                 OrdersManager.addInPostIcon(id, function(){
                     InPostManager.addShipment(order, function(response){
-                        console.log(JSON.parse(response));
+                        if(response.status > 200 && response.status < 300)
+                            OrdersManager.markRowAsSent(id);
+                        else{
+                            OrdersManager.markRowWithRed(id);
+                            console.log(JSON.parse(response.responseText));
+                        }
                     });
                 });
                 console.log(order);

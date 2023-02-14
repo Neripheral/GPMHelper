@@ -58,13 +58,31 @@ class OrdersManager{
         return $(".gpmlist tbody #so_row_"+id);
     }
 
+    static setElementIcon(element, url){
+        element.css("background-image", "url(" + url + ")");
+    }
+
     static addInPostIcon(id, onClick){
         var element = this.getRowElementFor(id).children('.td_operation').first();
         element.contents().filter(function(){return this.nodeType===3;}).remove();
         element.width("100px");
         element.append(
-            `<a info="InPost" style="background-image: url(`+chrome.runtime.getURL('img/inpost_logo.png')+`)">InPost</a>`
+            `<a id="inpost_icon" info="InPost">InPost</a>`
         );
+        this.setElementIcon(element.find("#inpost_icon"), chrome.runtime.getURL('img/inpost_logo.png'));
         element.click(onClick);
+    }
+
+    static markRowWithColor(id, color){
+        this.getRowElementFor(id).css("background-color", color);
+    }
+
+    static markRowAsSent(id){
+        this.markRowWithColor(id, "green");
+        this.getRowElementFor(id).find("#inpost_icon").css("background-image", "url(")
+    }
+
+    static markRowWithRed(id){
+        this.markRowWithColor(id, "red");
     }
 }
