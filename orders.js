@@ -13,17 +13,6 @@ function onResponseReceived(responseText){
             inPost.getShipments(function(response){console.log(JSON.parse(response));});    
         });
         
-        inPost.addShipment({
-            lockerId: "WAW099",
-            email: "justanemail@gmail.com",
-            phone: "123456789",
-            first_name: "Adam",
-            last_name: "Sandler",
-            city: "Łódź",
-            building_number: "22",
-            street: "Główna",
-            post_code: "11-123"
-        }, function(response){console.log(response);});
-
+        inPost.addShipment(OrdersManager.getExampleOrder(), function(response){console.log(response);});
     });
 })();
