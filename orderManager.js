@@ -70,7 +70,7 @@ class OrdersManager{
             `<a id="inpost_icon" info="InPost">InPost</a>`
         );
         this.setElementIcon(element.find("#inpost_icon"), chrome.runtime.getURL('img/inpost_logo.png'));
-        element.click(onClick);
+        element.find("#inpost_icon").click(onClick);
     }
 
     static markRowWithColor(id, color){
