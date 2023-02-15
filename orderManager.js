@@ -59,6 +59,12 @@ class OrdersManager{
         return order;
     }
 
+    static processOrder(id, onOrderReceived){
+        this.fetchOrderById(id, function(html){
+            onOrderReceived(OrdersManager.parseHtmlToOrder(html));
+        });
+    }
+
     static initRowInPostForId(id, onClick){
         OrdersListView.initRowForInPost(id, onClick);
     }
