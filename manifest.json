@@ -3,6 +3,9 @@
     "name": "GPMHelper",
     "description": "Automation helper and CMD manager.",
     "version": "1.0",
+    "permissions": [
+        "storage"
+    ],
     "icons": {
         "16": "/img/icon16.png",
         "48": "/img/icon48.png",
@@ -23,5 +26,5 @@
                         "img/error_icon.png"],
           "matches": ["<all_urls>"]
         }
-      ]
+    ]
 }
