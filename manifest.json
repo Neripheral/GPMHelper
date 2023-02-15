@@ -17,7 +17,7 @@
         "privateData.js", 
         "inPostManager.js",
         "ordersListView.js",
-        "orderManager.js",
+        "ordersManager.js",
         "orders.js"]
     }],
     "web_accessible_resources": [
