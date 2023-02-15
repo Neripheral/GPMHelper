@@ -11,11 +11,9 @@ function getVersion(){
 function getOrderFromStorage(key, onRetrieval){
     //chrome.storage.local.get(key).then(onRetrieval);
     chrome.storage.local.get(key).then(function(result){
-        console.log(JSON.stringify(result));
         if(jQuery.isEmptyObject(result))
             onRetrieval(null);
         else if(Object.values(result)[0].version != this.getVersion()){
-            console.log("Here!!!");
             chrome.storage.local.remove(key);
             onRetrieval(null);
         }else{
@@ -29,12 +27,12 @@ function setOrderInStorage(key, value){
     toSet[key] = {};
     toSet[key]["order"] = value;
     toSet[key]["version"] = this.getVersion();
-    console.log(JSON.stringify(toSet));
     chrome.storage.local.set(toSet);
 }
 
 function onOrderNotFound(id){
     OrdersManager.processOrder(id, function(order){
+        console.log(id + " processed: " + order);
         if(order == false){
             this.setOrderInStorage(id, false);
         }else{
@@ -68,21 +66,31 @@ function onOrderFound(id, order){
     });
 }
 
+var serverOverheat = 0;
+
 function main(){
     OrdersManager.initInpost();
     console.log("Inpost initialized");
-    var serverOverheat = 0;
+    
     OrdersListView.getAllRows().each(function(index, row){
-        if(serverOverheat > 40)
-            return;
         var id = OrdersListView.getRowId($(row));
         var key = id;
         getOrderFromStorage(key, function(result){
-            console.log("Available: " + JSON.stringify(result));
             if(result === null){
-                onOrderNotFound(id);
-                serverOverheat++;
+                if(serverOverheat > 40){
+                    if(serverOverheat == 41){
+                        console.log("Overheating! Processing stopped!");
+                        serverOverheat++;
+                    }
+                    return;
+                }
+                else{
+                    console.log(id + " missing. Requesting process.");
+                    onOrderNotFound(id);
+                    serverOverheat++;
+                }
             }else{
+                console.log(id + " found in cache: " + result);
                 onOrderFound(id, result);
             }
         });
