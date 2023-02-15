@@ -112,6 +112,11 @@ class OrdersManager{
                 message.receiver.splice(message.receiver.indexOf(email), 1);
                 message.problem.push("Podany email jest niepoprawny!")
             }
+            var phone = message.receiver.find(element => Object.hasOwn(element, "phone"));
+            if(phone != false){
+                message.receiver.splice(message.receiver.indexOf(phone), 1);
+                message.problem.push("Podany telefon jest niepoprawny!")
+            }
             if(message.receiver.length == 0)
                 delete message.receiver;
         }
