@@ -4,15 +4,41 @@
     });
 })();
 
+function getVersion(){
+    return chrome.runtime.getManifest().version;
+}
+
+function getOrderFromStorage(key, onRetrieval){
+    //chrome.storage.local.get(key).then(onRetrieval);
+    chrome.storage.local.get(key).then(function(result){
+        console.log(JSON.stringify(result));
+        if(jQuery.isEmptyObject(result))
+            onRetrieval(null);
+        else if(Object.values(result)[0].version != this.getVersion()){
+            console.log("Here!!!");
+            chrome.storage.local.remove(key);
+            onRetrieval(null);
+        }else{
+            onRetrieval(Object.values(result)[0].order);
+        }
+    });
+}
+
+function setOrderInStorage(key, value){
+    var toSet = {};
+    toSet[key] = {};
+    toSet[key]["order"] = value;
+    toSet[key]["version"] = this.getVersion();
+    console.log(JSON.stringify(toSet));
+    chrome.storage.local.set(toSet);
+}
+
 function onOrderNotFound(id){
     OrdersManager.processOrder(id, function(order){
-        var toSet = {};
         if(order == false){
-            toSet[id] = false;
-            chrome.storage.local.set(toSet);
+            this.setOrderInStorage(id, false);
         }else{
-            toSet[id] = order;
-            chrome.storage.local.set(toSet);
+            this.setOrderInStorage(id, order);
             this.onOrderFound(id, order);
         }
     });
@@ -45,16 +71,19 @@ function onOrderFound(id, order){
 function main(){
     OrdersManager.initInpost();
     console.log("Inpost initialized");
+    var serverOverheat = 0;
     OrdersListView.getAllRows().each(function(index, row){
-        /*if(index > 20)
-            return;*/
+        if(serverOverheat > 40)
+            return;
         var id = OrdersListView.getRowId($(row));
         var key = id;
-        chrome.storage.local.get(key).then(function(result){
-            if(jQuery.isEmptyObject(result)){
+        getOrderFromStorage(key, function(result){
+            console.log("Available: " + JSON.stringify(result));
+            if(result === null){
                 onOrderNotFound(id);
+                serverOverheat++;
             }else{
-                onOrderFound(id, Object.values(result)[0]);
+                onOrderFound(id, result);
             }
         });
     });
