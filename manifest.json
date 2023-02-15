@@ -16,7 +16,7 @@
         "js": ["thirdParty/jquery-3.6.3.min.js", 
         "privateData.js", 
         "inPostManager.js",
-        "ordersView.js",
+        "ordersListView.js",
         "orderManager.js",
         "orders.js"]
     }],
