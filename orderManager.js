@@ -54,72 +54,68 @@ class OrdersManager{
         return order;
     }
 
-    static getRowElementFor(id){
-        return $(".gpmlist tbody #so_row_"+id);
-    }
-
-    static setElementIcon(element, url){
-        element.css("background-image", "url(" + url + ")");
-    }
-
-    static addInPostIcon(id, onClick){
-        var element = this.getRowElementFor(id).children('.td_operation').first();
-        element.contents().filter(function(){return this.nodeType===3;}).remove();
-        element.width("140px");
-        element.append(
-            `<a id="inpost_icon" info="InPost">InPost</a>`
-        );
-        this.setElementIcon(element.find("#inpost_icon"), chrome.runtime.getURL('img/inpost_logo.png'));
-        element.append(
-            `<select id='inpost_size'>
-                <option value='A'>A</option>
-                <option value='B'>B</option>
-                <option value='C'>C</option>
-            </select>`
-        );
-        element.find("#inpost_icon").click(function(){
-            onClick(element.find("#inpost_size option:selected").text());
-        });
-    }
-
-    static markRowWithColor(id, color){
-        this.getRowElementFor(id).css("background-color", color);
+    static initRowInPostForId(id, onClick){
+        OrdersListView.initRowForInPost(id, onClick);
     }
 
     static markRowAsSent(id){
-        this.markRowWithColor(id, "green");
-        this.setElementIcon(this.getRowElementFor(id).find("#inpost_icon"), chrome.runtime.getURL('img/success_icon.png'));
+        var iconImage = chrome.runtime.getURL('img/success_icon.png');
+        OrdersListView.setRowIcon(id, iconImage);
+        OrdersListView.markRowWithColor(id, "green");
     }
 
-    static markRowAsError(id, originalMessage){
-        var message = structuredClone(originalMessage);
-        this.markRowWithColor(id, "red");
-        var iconElement = this.getRowElementFor(id).find("#inpost_icon");
-        this.setElementIcon(iconElement, chrome.runtime.getURL('img/error_icon.png'));
-        message.problem = [];
-        if(Object.hasOwn(message, "custom_attributes")){
-            var locker = message.custom_attributes.find(element => Object.hasOwn(element, "target_point"));
+    static #getReadableErrorMessage(rawError){
+        var error = structuredClone(rawError);
+        error.problem = [];
+        if(Object.hasOwn(error, "custom_attributes")){
+            var locker = error.custom_attributes.find(element => Object.hasOwn(element, "target_point"));
             if(locker != false){
-                message.custom_attributes.splice(message.custom_attributes.indexOf(locker), 1);
-                message.problem.push("Podany paczkomat nie istnieje!")
+                error.custom_attributes.splice(error.custom_attributes.indexOf(locker), 1);
+                error.problem.push("Podany paczkomat nie istnieje!")
             }
-            if(message.custom_attributes.length == 0)
-                delete message.custom_attributes;
+            if(error.custom_attributes.length == 0)
+                delete error.custom_attributes;
         }
-        if(Object.hasOwn(message, "receiver")){
-            var email = message.receiver.find(element => Object.hasOwn(element, "email"));
+        if(Object.hasOwn(error, "receiver")){
+            var email = error.receiver.find(element => Object.hasOwn(element, "email"));
             if(email != false){
-                message.receiver.splice(message.receiver.indexOf(email), 1);
-                message.problem.push("Podany email jest niepoprawny!")
+                error.receiver.splice(error.receiver.indexOf(email), 1);
+                error.problem.push("Podany email jest niepoprawny!")
             }
-            var phone = message.receiver.find(element => Object.hasOwn(element, "phone"));
+            var phone = error.receiver.find(element => Object.hasOwn(element, "phone"));
             if(phone != false){
-                message.receiver.splice(message.receiver.indexOf(phone), 1);
-                message.problem.push("Podany telefon jest niepoprawny!")
+                error.receiver.splice(error.receiver.indexOf(phone), 1);
+                error.problem.push("Podany telefon jest niepoprawny!")
             }
-            if(message.receiver.length == 0)
-                delete message.receiver;
+            if(error.receiver.length == 0)
+                delete error.receiver;
         }
-        iconElement.prop("title", JSON.stringify(message));
+        return JSON.stringify(error);
+    }
+
+    static markRowAsError(id, error){
+        var iconImage = chrome.runtime.getURL('img/error_icon.png');
+        OrdersListView.setRowIcon(id, iconImage);
+        OrdersListView.markRowWithColor(id, "red");
+        OrdersListView.getInPostIconForId(id).prop("title", this.#getReadableErrorMessage(error));
+    }
+
+    static #addInPostIconOnClickForId(id, onClick){
+        var selectionElement = OrdersListView.getInPostSizeSelectForId(id);
+        OrdersListView.getInPostIconForId(id).click(function(){
+            onClick(selectionElement.find("option:selected").text());
+        });
+    }
+
+    static prepareRowInPostForId(id, onClick){
+        OrdersListView.getEveryInPostElementForId(id).show();
+        this.#addInPostIconOnClickForId(id, onClick);
+    }
+
+    static initInpost(){
+        OrdersListView.getAllRows().each(function(index, row){
+            var id = OrdersListView.getRowId($(row));
+            OrdersListView.initRowForInPost(id);
+        });
     }
 }

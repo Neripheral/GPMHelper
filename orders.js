@@ -17,7 +17,7 @@ function loadFrom(index){
             if(order == false)
                 return false;
 
-            OrdersManager.addInPostIcon(id, function(size){
+            OrdersManager.prepareRowInPostForId(id, function(size){
                 if(size == "A")
                     order.size = "small";
                 else if(size == "B")
@@ -40,5 +40,7 @@ function loadFrom(index){
 }
 
 function main(){
+    const ID_UPPER_BOUND = 250;
+    OrdersManager.initInpost();
     loadFrom(1);
 }
