@@ -30,6 +30,11 @@ class OrdersManager{
     }
 
     static parsePhone(phone){
+        phone = phone.replace(/[^\d]/g, "");
+        if(phone.length == 11 && phone.slice(0, 2) === "48")
+            return phone.slice(2);
+        if(phone.length == 10 && phone.slice(0, 1) === "0")
+            return phone.slice(1);
         return phone;
     }
 
