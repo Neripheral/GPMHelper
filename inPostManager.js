@@ -1,7 +1,7 @@
 class InPostManager{
     static companyId = PrivateData.organizationId;
     static token = PrivateData.token;
-    static root = "https://sandbox-api-shipx-pl.easypack24.net/v1/";
+    static root = PrivateData.inpost_root;
 
     static tryConnect(onResponseReceived){
         var xhttp = new XMLHttpRequest();
