@@ -55,10 +55,11 @@ function onOrderFound(id, order){
             order.size = "large";
 
         InPostManager.addShipment(order, function(response){
-            if(response.readyState == 4 && response.status > 200 && response.status < 300)
+            var responseText = JSON.parse(response.responseText);
+            if(response.readyState == 4 && response.status > 200 && response.status < 300){
                 OrdersManager.markRowAsSent(id);
-            else if(response.readyState == 4 && response.status >= 400){
-                var responseText = JSON.parse(response.responseText);
+                ShipmentRegistry.registerShipment(id, order.name, responseText.id);
+            }else if(response.readyState == 4 && response.status >= 400){
                 OrdersManager.markRowAsError(id, responseText.details);
                 console.log(responseText);
             }
@@ -71,7 +72,7 @@ var serverOverheat = 0;
 function main(){
     OrdersManager.initInpost();
     console.log("Inpost initialized");
-    
+
     OrdersListView.getAllRows().each(function(index, row){
         var id = OrdersListView.getRowId($(row));
         var key = id;
