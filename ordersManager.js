@@ -39,7 +39,7 @@ class OrdersManager{
     }
 
     static parseHtmlToOrder(html){
-        const pattern = /.*Telefon<\/div>[^>]+>(?<phone>[^<]*)<[^E]*Email[^:]*:(?<email>[^"]*)[^A]*Adres dostawy(?:[^>]*>){2}(?<first_name>[^<\s]*)\s*(?<last_name>[^<]*)(?:[^>]*>){4}(?<street>[^<]*?)\s*(?<building_number>[\d\/]+)<(?:[^>]*>){2}(?<postalCode>\d\d-\d\d\d) (?<city>[^<\/]*)[^P]*Paczkomat(?:[^>]*>){2}\s*(?<lockerId>[^<\s]*)\s*<(?:[^>]*>){2}\s*(?<lockerAddress>[^<]*\S)\s*</;
+        const pattern = /.*Telefon<\/div>[^>]+>(?<phone>[^<]*)<[^E]*Email[^:]*:(?<email>[^"]*)[^A]*Adres dostawy(?:[^>]*>){2}(?<name>[^<]*)(?:[^>]*>){4}(?<street>[^<]*?)\s*(?<building_number>[\d\w\/]+)<(?:[^>]*>){2}(?<postalCode>\d\d-\d\d\d) (?<city>[^<\/]*)[^P]*Paczkomat(?:[^>]*>){2}\s*(?<lockerId>[^<\s]*)\s*<(?:[^>]*>){2}\s*(?<lockerAddress>[^<]*\S)\s*</;
         
         var found = html.match(pattern);
         if(found == null)
@@ -49,8 +49,7 @@ class OrdersManager{
             lockerId: found.groups.lockerId,
             email: found.groups.email,
             phone: this.parsePhone(found.groups.phone),
-            first_name: found.groups.first_name,
-            last_name: found.groups.last_name,
+            name: found.groups.name,
             city: found.groups.city,
             building_number: found.groups.building_number,
             street: found.groups.street,
