@@ -67,8 +67,6 @@ class InPostManager{
                 }
             ],
             "receiver": {
-                "first_name": order.first_name,
-                "last_name": order.last_name,
                 "email": order.email,
                 "phone": order.phone,
                 "address": {
