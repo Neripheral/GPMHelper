@@ -17,4 +17,10 @@ class ShipmentRegistry{
             });
         });
     }
+
+    static printRegistryToConsole(){
+        chrome.storage.local.get("inpost_registry", data => {
+            console.log(JSON.stringify(data));
+        });
+    }
 }
