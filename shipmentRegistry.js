@@ -31,7 +31,7 @@ class ShipmentRegistry{
     }
 
     static getAsPDF(){
-        this.performOnRegistry((data) => {
+        ShipmentRegistry.performOnRegistry((data) => {
             var pdf = new jsPDF({
                 orientation: 'p',
                 unit: 'mm',

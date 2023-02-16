@@ -128,4 +128,8 @@ class OrdersManager{
             OrdersListView.initRowForInPost(id);
         });
     }
+
+    static addDownloadRegistryButton(onClick){
+        OrdersListView.addPDFButton(chrome.runtime.getURL('img/inpost_logo.png')).click(onClick);
+    }
 }

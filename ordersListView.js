@@ -72,4 +72,15 @@ class OrdersListView{
     static markRowWithColor(id, color){
         this.getRowForId(id).css("background-color", color);
     }
+
+    static getPDFHolder(){
+        return $(".adminListBox form.search-form");
+    }
+
+    static addPDFButton(iconURL){
+        this.getPDFHolder().find(".clear").remove();
+        this.getPDFHolder().append(`<button type='button' id='inpost_registry_button' style='margin-left: 10px;'><img id="inpost_registry_button_icon" style="height: 21px; width: 24px;"><b style="margin-left: 5px;">InPost PDF</b></button>`);
+        this.#setElementIcon(this.getPDFHolder().find("#inpost_registry_button_icon"), iconURL);
+        return this.getPDFHolder().find("#inpost_registry_button");
+    }
 }

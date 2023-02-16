@@ -72,6 +72,7 @@ var serverOverheat = 0;
 
 function main(){
     OrdersManager.initInpost();
+    OrdersManager.addDownloadRegistryButton(ShipmentRegistry.getAsPDF);
 
     ShipmentRegistry.printRegistryToConsole();
     OrdersListView.getAllRows().each(function(index, row){
