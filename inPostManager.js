@@ -35,9 +35,7 @@ class InPostManager{
      * @param {*} order Order object. It consists of:
      *              lockerId
      *              email
-     *              phone          must consist of 9 digits
-     *              first_name     
-     *              last_name      
+     *              phone          must consist of 9 digits    
      *              city      
      *              building_number
      *              street
