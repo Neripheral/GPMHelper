@@ -18,14 +18,17 @@ class InPostManager{
         xhttp.send();
     }
 
-    static getShipments(onResponseReceived){
+    static getShipment(id = "", onResponseReceived){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
-            onResponseReceived(this.responseText);
+            onResponseReceived(this);
         }
         var url = this.root + "organizations/" + this.companyId + "/shipments";
+        console.log(id);
+        if(id.localeCompare("") !== 0)
+            url = url + "?id=" + id;
         xhttp.open("GET", url, "true");
-        xhttp.setRequestHeader("Authorization", 'Bearer ' + this.token);
+        xhttp.setRequestHeader("Authorization", 'Bearer ' + PrivateData.token);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send();
     }
