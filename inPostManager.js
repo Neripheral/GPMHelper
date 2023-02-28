@@ -25,7 +25,7 @@ class InPostManager{
         }
         var url = this.root + "organizations/" + this.companyId + "/shipments";
         console.log(id);
-        if(id.localeCompare("") !== 0)
+        if(String(id).localeCompare("") !== 0)
             url = url + "?id=" + id;
         xhttp.open("GET", url, "true");
         xhttp.setRequestHeader("Authorization", 'Bearer ' + PrivateData.token);

@@ -30,39 +30,76 @@ class ShipmentRegistry{
         });
     }
 
+    static composePDF(data){
+        var pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+            putOnlyUsedFonts: true
+        });
+        
+        var date = new Date();
+        var today = `${date.getFullYear()}-${('0' + (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+        pdf.text(today, 10, 15);
+        var count = 1;
+        var textArr = [];
+        data.forEach(shipment => {
+            var shipmentText = `${('0' + count).slice(-2)}. ${shipment.inpost_id} - ${shipment.order_id} ${shipment.title}`.replace(/[\u0100-\uFFFF]/g,'?');
+            textArr = textArr.concat(pdf.splitTextToSize(shipmentText, 200));
+            count++;
+            if(textArr.length > 40){
+                textArr.concat(["..."]);
+                pdf.text(textArr, 5, 25);
+                pdf.addPage();
+                textArr = [];
+            }
+        });
+        pdf.text(textArr, 5, 25);
+        pdf.save('testingPdf.pdf');
+    }
+
+    static tmpData = [];
+
+    static tryComposePDF(){
+        console.log("Control: " + JSON.stringify(this.tmpData));
+        var passed = true;
+        this.tmpData.forEach(v => {
+            if(v === false)
+                passed = false;
+        });
+        if(passed === true)
+            this.composePDF(this.tmpData);
+    }
+
     static getAsPDF(){
+        ShipmentRegistry.tmpData = [];
+        var date = new Date();
+        var today = `${date.getFullYear()}-${('0' + (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
         ShipmentRegistry.performOnRegistry((data) => {
-            var pdf = new jsPDF({
-                orientation: 'p',
-                unit: 'mm',
-                format: 'a4',
-                putOnlyUsedFonts: true
-            });
-			
-            var date = new Date();
-            var today = `${date.getFullYear()}-${('0' + (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
-            pdf.text(today, 10, 15);
-			var count = 1;
-            var textArr = [];
             Object.values(data).forEach(value => {
                 const [date, shipment] = Object.entries(value)[0];
                 var match = date.match(/(?<date>[^\s]*)\s(?<time>[^\s]*)/);
-
+    
                 if(today !== match.groups.date)
                     return;
-
-                var shipmentText = `${('0' + count).slice(-2)}. ${shipment.inpost_id} - ${shipment.order_id} ${shipment.title}`.replace(/[\u0100-\uFFFF]/g,'?');
-                textArr = textArr.concat(pdf.splitTextToSize(shipmentText, 200));
-				count++;
-                if(textArr.length > 40){
-                    textArr.concat(["..."]);
-                    pdf.text(textArr, 5, 25);
-                    pdf.addPage();
-                    textArr = [];
-                }
+    
+                var index = ShipmentRegistry.tmpData.length;
+                ShipmentRegistry.tmpData.push(false);
+                InPostManager.getShipment(shipment.inpost_id, function(response){
+                    if(response.readyState == 4){
+                        if(response.status >= 200 && response.status < 300){
+                            var responseShipment = JSON.parse(response.responseText).items[0];
+                            var toPush = {
+                                inpost_id: responseShipment.tracking_number,
+                                order_id: shipment.order_id,
+                                title: shipment.title
+                            };
+                            ShipmentRegistry.tmpData[index] = toPush;
+                        }
+                        ShipmentRegistry.tryComposePDF();
+                    }
+                });
             });
-            pdf.text(textArr, 5, 25);
-            pdf.save('testingPdf.pdf');
         });
     }
 }
