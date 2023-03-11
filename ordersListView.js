@@ -1,6 +1,8 @@
 class OrdersListView{
     static HTML_ICON_CLASS = "inpost_icon";
     static HTML_SIZE_SELECT_CLASS = "inpost_size";
+    static HTML_ONOFFSWITCH_ID = "inpost_onoff_switch";
+    static HTML_VALID_INPOST_CLASS = "inpost_valid_row";
     static HTML_INPOST_CLASS = "inpost_stuff";
 
     static getAllRows(){
@@ -82,5 +84,22 @@ class OrdersListView{
         this.getPDFHolder().append(`<button type='button' id='inpost_registry_button' style='margin-left: 10px;'><img id="inpost_registry_button_icon" style="height: 21px; width: 24px;"><b style="margin-left: 5px;">InPost PDF</b></button>`);
         this.#setElementIcon(this.getPDFHolder().find("#inpost_registry_button_icon"), iconURL);
         return this.getPDFHolder().find("#inpost_registry_button");
+    }
+
+    static getOnOffSwitchHolder(){
+        return this.getPDFHolder();
+    }
+
+    static addOnOffSwitch(){
+        this.getOnOffSwitchHolder().append(`<label style="padding: 4px;"><b style="font-size: 20px;">Operacje InPost:</b> <input id="` + this.HTML_ONOFFSWITCH_ID + `" type="checkbox"></label>`);
+        return this.getOnOffSwitchHolder().find('#' + this.HTML_ONOFFSWITCH_ID);
+    }
+
+    static markRowAsValid(id){
+        this.getEveryInPostElementForId(id).addClass(this.HTML_VALID_INPOST_CLASS);
+    }
+
+    static getAllValidFields(){
+        return $("." + this.HTML_VALID_INPOST_CLASS);
     }
 }

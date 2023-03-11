@@ -118,7 +118,8 @@ class OrdersManager{
     }
 
     static prepareRowInPostForId(id, onClick){
-        OrdersListView.getEveryInPostElementForId(id).show();
+        OrdersListView.markRowAsValid(id);
+        //OrdersListView.getEveryInPostElementForId(id).show();
         this.#addInPostIconOnClickForId(id, onClick);
     }
 
@@ -131,5 +132,15 @@ class OrdersManager{
 
     static addDownloadRegistryButton(onClick){
         OrdersListView.addPDFButton(chrome.runtime.getURL('img/inpost_logo.png')).click(onClick);
+    }
+
+    static addOnOffInpostSwitch(){
+        OrdersListView.addOnOffSwitch().change(function(){
+            console.log(OrdersListView.getAllValidFields());
+            if(this.checked)
+                OrdersListView.getAllValidFields().show();
+            else
+                OrdersListView.getAllValidFields().hide();
+        });
     }
 }
