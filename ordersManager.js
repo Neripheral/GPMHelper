@@ -39,7 +39,7 @@ class OrdersManager{
     }
 
     static parseHtmlToOrder(html){
-        const pattern = /.*Telefon<\/div>[^>]+>(?<phone>[^<]*)<[^E]*Email[^:]*:(?<email>[^"]*)[^A]*Adres dostawy(?:[^>]*>){2}(?<name>[^<]*)(?:[^>]*>){4}(?<street>[^<]*?)\s*(?<building_number>[\w\/]+)\s*<(?:[^>]*>){2}(?<postalCode>\d\d-\d\d\d) (?<city>[^<\/]*)[^P]*Paczkomat(?:[^>]*>){2}\s*(?<lockerId>[^<\s]*)\s*<(?:[^>]*>){2}\s*(?<lockerAddress>[^<]*\S)\s*</;
+        const pattern = /.*Telefon<\/div>[^>]+>(?<phone>[^<]*)<[^E]*Email[^:]*:(?<email>[^"]*)[^A]*Adres dostawy(?:[^>]*>){2}(?<name>[^<]*)(?:[^>]*>){4}(?<street>[^<]*?)\s*(?<building_number>[\w\/]+)\s*<(?:[^>]*>){2}(?<postalCode>\d\d[^\d]*\d\d\d) (?<city>[^<\/]*)[^P]*Paczkomat(?:[^>]*>){2}\s*(?<lockerId>[^<\s]*)\s*<(?:[^>]*>){2}\s*(?<lockerAddress>[^<]*\S)\s*</;
         
         var found = html.match(pattern);
         if(found == null)
