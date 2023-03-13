@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "GPMHelper",
     "description": "Automation helper and CMD manager.",
-    "version": "1.4",
+    "version": "1.4.1",
     "permissions": [
         "storage"
     ],
