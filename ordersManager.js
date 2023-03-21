@@ -53,9 +53,14 @@ class OrdersManager{
             city: found.groups.city,
             building_number: found.groups.building_number,
             street: found.groups.street,
-            post_code: found.groups.postalCode
+            post_code: this.parsePostalCode(found.groups.postalCode)
         }
         return order;
+    }
+
+    static parsePostalCode(code){
+        const raw = code.replace(/[^\d]/gi, '');
+        return raw.substring(0, 2) + '-' + raw.substring(2);
     }
 
     static processOrder(id, onOrderReceived){
